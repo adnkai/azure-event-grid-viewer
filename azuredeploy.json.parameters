@@ -8,7 +8,7 @@
         "hostingPlanName" {
           "value","myhostingplanadn0815"
         },
-        "sitename": {
+        "siteName": {
           "value": "myuniquesiteName0815"
         },
         "storagePrefix": {

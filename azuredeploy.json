@@ -2,18 +2,7 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-      "siteName": {
-        "type": "string",
-        "metadata": {
-          "description": "The name of the web app that you wish to create."
-        }
-      },
-      "hostingPlanName": {
-        "type": "string",
-        "metadata": {
-          "description": "The name of the App Service plan to use for hosting the web app."
-        }
-      },
+      
       "sku": {
         "type": "string",
         "allowedValues": [
@@ -51,6 +40,7 @@
         }
       }
     },
+    
     "resources": [
       {
         "apiVersion": "2015-08-01",
@@ -81,10 +71,6 @@
           "serverFarmId": "[parameters('hostingPlanName')]",
           "siteConfig": {
                 "webSocketsEnabled": true
-          },
-          "parametersLink": {
-            "uri":"https://raw.githubusercontent.com/adnkai/azure-event-grid-viewer/master/azuredeploy.json.parameters",
-            "contentVersion":"1.0.0.0"
           }
         },
         "resources": [
@@ -98,11 +84,7 @@
             "properties": {
               "RepoUrl": "[parameters('repoURL')]",
               "branch": "[parameters('branch')]",
-              "IsManualIntegration": true,
-              "parametersLink": {
-                "uri":"https://raw.githubusercontent.com/adnkai/azure-event-grid-viewer/master/azuredeploy.json.parameters",
-                "contentVersion":"1.0.0.0"
-              }
+              "IsManualIntegration": true
             }
           }
         ]
