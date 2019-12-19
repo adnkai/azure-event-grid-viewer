@@ -62,7 +62,11 @@
           "capacity": "0"
         },
         "properties": {
-          "name": "[parameters('hostingPlanName')]"
+          "name": "[parameters('hostingPlanName')]",
+          "parametersLink": {
+            "uri":"https://raw.githubusercontent.com/adnkai/azure-event-grid-viewer/master/azuredeploy.json.parameters",
+            "contentVersion":"1.0.0.0"
+          }
         }
       },
       {
@@ -77,7 +81,11 @@
           "serverFarmId": "[parameters('hostingPlanName')]",
           "siteConfig": {
                 "webSocketsEnabled": true
-          }          
+          },
+          "parametersLink": {
+            "uri":"https://raw.githubusercontent.com/adnkai/azure-event-grid-viewer/master/azuredeploy.json.parameters",
+            "contentVersion":"1.0.0.0"
+          }
         },
         "resources": [
           {
@@ -90,7 +98,11 @@
             "properties": {
               "RepoUrl": "[parameters('repoURL')]",
               "branch": "[parameters('branch')]",
-              "IsManualIntegration": true
+              "IsManualIntegration": true,
+              "parametersLink": {
+                "uri":"https://raw.githubusercontent.com/adnkai/azure-event-grid-viewer/master/azuredeploy.json.parameters",
+                "contentVersion":"1.0.0.0"
+              }
             }
           }
         ]
