@@ -147,6 +147,7 @@ namespace viewer.Controllers
         
         private async Task<IActionResult> HandleDevOpsEvents(string jsonContent)
         {
+            jsonContent = "[" + jsonContent + "]";
             var events = JArray.Parse(jsonContent);
             foreach (var e in events)
             {
