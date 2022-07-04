@@ -28,9 +28,11 @@ namespace viewer.Controllers
             => HttpContext.Request.Headers["aeg-event-type"].FirstOrDefault() ==
                "Notification";
 
+        // No header information from devops
         private bool DevOpsNotification
             => HttpContext.Request.Headers["publisherId"].FirstOrDefault() ==
                "tfs";
+        
 
         private readonly IHubContext<GridEventsHub> _hubContext;
 
@@ -87,11 +89,13 @@ namespace viewer.Controllers
 
                     return await HandleGridEvents(jsonContent);
                 }
+                // No header information from devops
                 else if (DevOpsNotification) {
+                    Console.WriteLine(DevOpsNotification);
                     return await HandleDevOpsEvents(jsonContent);
                 }
-
-                return BadRequest();                
+                return await HandleDevOpsEvents(jsonContent);
+                //return BadRequest();                
             }
         }
 
@@ -148,14 +152,13 @@ namespace viewer.Controllers
             {
                 // Invoke a method on the clients for 
                 // an event grid notiification.                        
-                var details = JsonConvert.DeserializeObject<GridEvent<dynamic>>(e.ToString());
+                var details = JsonConvert.DeserializeObject<DevOpsEvent<dynamic>>(e.ToString());
                 await this._hubContext.Clients.All.SendAsync(
-                    "gridupdate",
-                    details.resource.id,
-                    details.resource.workItemId,
-                    details.resource.rev,
-                    details.resource.revisedDate.ToLongTimeString(),
-                    details.revisedBy.displayName,
+                     "gridupdate",
+                    details.Id,
+                    details.EventType,
+                    details.Subject,
+                    details.EventTime.ToLongTimeString(),
                     e.ToString());
             }
 

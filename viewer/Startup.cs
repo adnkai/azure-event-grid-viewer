@@ -49,19 +49,29 @@ namespace viewer
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseRouting();
 
             // Add SignalR hub routes
-            app.UseSignalR(routes =>
+            /*app.UseSignalR(routes =>
             {
                 routes.MapHub<GridEventsHub>("/hubs/gridevents");
+            });*/
+            // Add SignalR hub routes
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<GridEventsHub>("/hubs/gridevents");
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
-
+/*
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            */
         }
     }
 }
