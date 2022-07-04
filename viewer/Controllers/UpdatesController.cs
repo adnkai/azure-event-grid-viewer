@@ -151,11 +151,11 @@ namespace viewer.Controllers
                 var details = JsonConvert.DeserializeObject<GridEvent<dynamic>>(e.ToString());
                 await this._hubContext.Clients.All.SendAsync(
                     "gridupdate",
-                    resource.id,
-                    resource.workItemId,
-                    resource.rev,
-                    resource.revisedDate.ToLongTimeString(),
-                    revisedBy.displayName,
+                    details.resource.id,
+                    details.resource.workItemId,
+                    details.resource.rev,
+                    details.resource.revisedDate.ToLongTimeString(),
+                    details.revisedBy.displayName,
                     e.ToString());
             }
 
