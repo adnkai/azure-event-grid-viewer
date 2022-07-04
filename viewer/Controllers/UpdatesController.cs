@@ -28,6 +28,10 @@ namespace viewer.Controllers
             => HttpContext.Request.Headers["aeg-event-type"].FirstOrDefault() ==
                "Notification";
 
+        private bool DevOpsNotification
+            => HttpContext.Request.Headers["publisherId"].FirstOrDefault() ==
+               "tfs";
+
         private readonly IHubContext<GridEventsHub> _hubContext;
 
         #endregion
@@ -83,6 +87,9 @@ namespace viewer.Controllers
 
                     return await HandleGridEvents(jsonContent);
                 }
+                else if (DevOpsNotification) {
+                    return await HandleDevOpsEvents(jsonContent);
+                }
 
                 return BadRequest();                
             }
@@ -128,6 +135,27 @@ namespace viewer.Controllers
                     details.EventType,
                     details.Subject,
                     details.EventTime.ToLongTimeString(),
+                    e.ToString());
+            }
+
+            return Ok();
+        }
+        
+        private async Task<IActionResult> HandleDevOpsEvents(string jsonContent)
+        {
+            var events = JArray.Parse(jsonContent);
+            foreach (var e in events)
+            {
+                // Invoke a method on the clients for 
+                // an event grid notiification.                        
+                var details = JsonConvert.DeserializeObject<GridEvent<dynamic>>(e.ToString());
+                await this._hubContext.Clients.All.SendAsync(
+                    "gridupdate",
+                    resource.id,
+                    resource.workItemId,
+                    resource.rev,
+                    resource.revisedDate.ToLongTimeString(),
+                    revisedBy.displayName,
                     e.ToString());
             }
 
